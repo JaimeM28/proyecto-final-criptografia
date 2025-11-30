@@ -1,8 +1,10 @@
 /venv
 
-
 __pycache__/
 *.pyc
 
 # keystore personal 
 app/keystore.json
+
+# Carpeta generada en dev
+/wallet_cli.egg-info

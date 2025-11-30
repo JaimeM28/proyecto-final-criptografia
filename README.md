@@ -15,4 +15,10 @@ Implementación de un wallet en frío con generación de llaves, almacenamiento 
 `.\venv\Scripts\Activate.ps1`
 ### Instalar dependencias 
 `pip install -r requirements.txt`
-
+### Uso de la CLI 
+#### DEV 
+`pip install -e .`
+#### PROD
+`pip install .`
+## Desintalación
+`pip uninstall wallet-cli`
