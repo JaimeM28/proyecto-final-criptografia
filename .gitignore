@@ -8,3 +8,5 @@ app/keystore.json
 
 # Carpeta generada en dev
 /wallet_cli.egg-info
+# Carpeta produccion
+/build 
