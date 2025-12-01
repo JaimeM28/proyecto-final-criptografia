@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "wallet-cli"
+version = "0.1.0"
+description = "Cold Wallet CLI"
+authors = [
+  { name = "Jaime Miranda", email = "mirandaserranojaime@gmail.com" },
+  { name = "Marco Machorro", email = "example@mail.com" },
+  { name = "Jaasiel Rios", email = "example@mail.com" },
+  { name = "Mahatma Salgado", email = "example@mail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+  "argon2-cffi==25.1.0",
+  "argon2-cffi-bindings==25.1.0",
+  "cffi==2.0.0",
+  "cryptography==46.0.3",
+  "pycparser==2.23",
+  "PyNaCl==1.6.1"
+]
+
+
+[project.scripts]
+wallet = "app.main:main"
+
