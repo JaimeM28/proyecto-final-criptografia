@@ -11,7 +11,7 @@ authors = [
   { name = "Jaime Miranda", email = "mirandaserranojaime@gmail.com" },
   { name = "Marco Machorro", email = "example@mail.com" },
   { name = "Jaasiel Rios", email = "example@mail.com" },
-  { name = "Mahatma Salgado", email = "example@mail.com" }
+  { name = "Mahatma Salgado", email = "gandhi.salgado.ceron@gmail.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.10"
