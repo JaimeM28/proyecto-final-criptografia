@@ -4,6 +4,7 @@ from getpass import getpass
 import argparse
 
 from .keystore import create, DEFAULT_KEYSTORE_PATH
+from .address import load_address_from_keystore
 
 def _read_passphrase(prompt: str = "Passphrase: ") -> str:
     pw = getpass(prompt)
@@ -24,6 +25,18 @@ def cmd_wallet_init(args: argparse.Namespace) -> None:
     print(f"Esquema: {doc['scheme']}")
     print(f"Public key (b64): {doc['pubkey_b64']}")
 
+def cmd_wallet_address(args: argparse.Namespace) -> None:
+    path = Path(args.path) if args.path else DEFAULT_KEYSTORE_PATH
+    if not path.exists():
+        raise SystemExit(f"No se encontró el keystore en: {path}")
+
+    scheme, pubkey_b64, address = load_address_from_keystore(path)
+
+    print(f"Keystore: {path}")
+    print(f"Esquema: {scheme}")
+    print(f"Dirección: {address}")
+    print(f"Public key (b64): {pubkey_b64}")
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="wallet", description="cold wallet CLI")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -33,7 +46,11 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--path", help="Ruta del keystore (default: app/keystore.json)")
     sp.add_argument("--force", action="store_true", help="Sobrescribir si existe")
     sp.set_defaults(func=cmd_wallet_init)
-     
+    #wallet address
+    sp = sub.add_parser("address", help="Mostrar la dirección derivada del keystore")
+    sp.add_argument("--path", help="Ruta del keystore (default: app/keystore.json)")
+    sp.set_defaults(func=cmd_wallet_address)
+    
     return parser
 
 
