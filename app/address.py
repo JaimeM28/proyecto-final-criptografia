@@ -4,14 +4,11 @@ import json
 import base64
 from pathlib import Path
 from Crypto.Hash import keccak
-
 from .keystore import DEFAULT_KEYSTORE_PATH
 
 
 def keccak256(data: bytes) -> bytes:
-    """
-    Calcula KECCAK-256(data) devolviendo 32 bytes.
-    Forma requerida por la especificación del proyecto.
+    """ Aquí se alcula KECCAK-256(data) , esta sugerencia es la del docuemento en el proyecto devolviendo 32 bytes.
     """
     k = keccak.new(digest_bits=256)
     k.update(data)
@@ -19,10 +16,8 @@ def keccak256(data: bytes) -> bytes:
 
 
 def address_from_pubkey(pubkey_bytes: bytes) -> str:
-    """
-    Deriva la dirección desde la clave pública.
-    Especificación: KECCAK-256(pubkey)[12..31]
-    => últimos 20 bytes del hash (20 bytes = 40 hex)
+    """ En esta parte deriva la dirección desde la clave pública.
+    Especificación: KECCAK-256(pubkey)[12..31], aquí debido a que los últimos 20 bytes del hash (20 bytes = 40 hex)
     """
     digest = keccak256(pubkey_bytes)
     addr_bytes = digest[-20:]  # bytes 12..31
@@ -31,10 +26,7 @@ def address_from_pubkey(pubkey_bytes: bytes) -> str:
 
 def load_address_from_keystore(path: Path | None = None) -> tuple[str, str, str]:
     """
-    Lee keystore.json, extrae pubkey_b64 y deriva:
-    - scheme
-    - pubkey_b64
-    - address_hex
+    Aquí lee keystore.json, extrae pubkey_b64 y deriva el scheme, pubkey_b64 y address_hex
     """
     ks_path = path or DEFAULT_KEYSTORE_PATH
     data = json.loads(ks_path.read_text(encoding="utf-8"))
