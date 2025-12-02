@@ -8,6 +8,7 @@ import hashlib
 from datetime import datetime, timezone
 from typing import Optional, Tuple
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from .utils import canonical_json_bytes 
 
 # Ruta por defecto donde se almacenará el keystore si no se indica otra.
 DEFAULT_KEYSTORE_PATH = Path("app/keystore.json")
@@ -73,22 +74,6 @@ def aesgcm_encrypt(key: bytes, plaintext: bytes, *, aad: Optional[bytes] = None)
     aes = AESGCM(key)
     ct_with_tag = aes.encrypt(nonce, plaintext, aad)
     return nonce, ct_with_tag[:-16], ct_with_tag[-16:]
-
-
-# Implementacion básica de canonical json 
-# TODO: definir canonical json basado en RFC 8785 
-def canonical_json_bytes(obj) -> bytes:
-    """
-    Serializa un objeto a un JSON canónico
-    :param obj: Objeto serializable a JSON.
-    :return: Representación JSON canónica en bytes UTF-8.
-    """
-    return json.dumps(
-        obj,
-        separators=(",", ":"),
-        sort_keys=True,
-        ensure_ascii=False,
-    ).encode("utf-8")
 
 
 def _keystore_checksum(doc: dict) -> str:
