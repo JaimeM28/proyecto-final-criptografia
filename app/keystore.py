@@ -8,6 +8,9 @@ import hashlib
 from datetime import datetime, timezone
 from typing import Optional, Tuple
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from .utils import canonical_json_bytes 
+from typing import Optional
+from nacl.signing import VerifyKey 
 
 # Ruta por defecto donde se almacenará el keystore si no se indica otra.
 DEFAULT_KEYSTORE_PATH = Path("app/keystore.json")
@@ -75,22 +78,6 @@ def aesgcm_encrypt(key: bytes, plaintext: bytes, *, aad: Optional[bytes] = None)
     return nonce, ct_with_tag[:-16], ct_with_tag[-16:]
 
 
-# Implementacion básica de canonical json 
-# TODO: definir canonical json basado en RFC 8785 
-def canonical_json_bytes(obj) -> bytes:
-    """
-    Serializa un objeto a un JSON canónico
-    :param obj: Objeto serializable a JSON.
-    :return: Representación JSON canónica en bytes UTF-8.
-    """
-    return json.dumps(
-        obj,
-        separators=(",", ":"),
-        sort_keys=True,
-        ensure_ascii=False,
-    ).encode("utf-8")
-
-
 def _keystore_checksum(doc: dict) -> str:
     """
     Calcula el checksum de integridad de un JSON canonico.
@@ -149,3 +136,77 @@ def create(passphrase: str, path: Path = DEFAULT_KEYSTORE_PATH) -> dict:
         json.dump(doc, f, indent=2, ensure_ascii=False)
 
     return doc
+
+def b64d(s: str) -> bytes:
+    """Decodifica Base64 (string -> bytes)."""
+    return base64.b64decode(s.encode("ascii"))
+
+def aesgcm_decrypt(key: bytes, nonce: bytes, ciphertext: bytes, tag: bytes, *, aad: Optional[bytes] = None) -> bytes:
+    """Operacion inversa de aesgcm_encrypt."""
+    if len(key) != 32:
+        raise ValueError("AESGCM requiere llave de 32 bytes (256-bit)")
+    aes = AESGCM(key)
+    ct_with_tag = ciphertext + tag
+    return aes.decrypt(nonce, ct_with_tag, aad)
+
+def kdf_argon2id_from_params(passphrase: str, kdf_params: dict) -> bytes:
+    """Re-deriva la clave simétrica a partir de los parámetros guardados en el keystore."""
+    salt = b64d(kdf_params["salt_b64"])
+    return kdf_argon2id(
+        passphrase,
+        salt,
+        t_cost=int(kdf_params["t_cost"]),
+        m_cost=int(kdf_params["m_cost"]),
+        parallelism=int(kdf_params["p"]),
+    )
+
+def load(passphrase: str, path: Path = DEFAULT_KEYSTORE_PATH) -> dict:
+    """
+    Carga y descifra el keystore:
+    - Verifica checksum
+    - Deriva la clave simétrica con Argon2id
+    - Descifra la private key Ed25519
+
+    Devuelve:
+    {
+      "sk": SigningKey,
+      "vk": VerifyKey,
+      "pubkey_bytes": bytes,
+      "doc": dict del keystore
+    }
+    """
+    with path.open("r", encoding="utf-8") as f:
+        full_doc = json.load(f)
+
+    # 1) Verificar checksum
+    expected = full_doc.get("checksum")
+    doc_sin_checksum = dict(full_doc)
+    doc_sin_checksum.pop("checksum", None)
+    real = _keystore_checksum(doc_sin_checksum)
+    if real != expected:
+        raise ValueError("Checksum inválido: el keystore fue modificado o está corrupto.")
+
+    # 2) Verificar KDF
+    if full_doc.get("kdf") != "Argon2id":
+        raise ValueError("KDF no soportado (se esperaba Argon2id).")
+
+    # 3) Derivar clave simétrica
+    kdf_params = full_doc["kdf_params"]
+    key = kdf_argon2id_from_params(passphrase, kdf_params)
+
+    # 4) Descifrar private key
+    nonce = b64d(full_doc["cipher_params"]["nonce_b64"])
+    ciphertext = b64d(full_doc["ciphertext_b64"])
+    tag = b64d(full_doc["tag_b64"])
+    sk_bytes = aesgcm_decrypt(key, nonce, ciphertext, tag)
+
+    sk = SigningKey(sk_bytes)
+    vk: VerifyKey = sk.verify_key
+    pubkey_bytes = vk.encode()
+
+    return {
+        "sk": sk,
+        "vk": vk,
+        "pubkey_bytes": pubkey_bytes,
+        "doc": full_doc,
+    }
