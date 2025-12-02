@@ -10,7 +10,7 @@ description = "Cold Wallet CLI"
 authors = [
   { name = "Jaime Miranda", email = "mirandaserranojaime@gmail.com" },
   { name = "Marco Machorro", email = "marcomachorro29@gmail.com" },
-  { name = "Jaasiel Rios", email = "example@mail.com" },
+  { name = "Jaasiel Rios", email = "jaasiel.rios@ingenieria.unam.edu" },
   { name = "Mahatma Salgado", email = "gandhi.salgado.ceron@gmail.com" }
 ]
 readme = "README.md"
