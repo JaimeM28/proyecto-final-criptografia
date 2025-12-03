@@ -1,5 +1,7 @@
 #!/bin/bash
-
+--@Autor: Jaime Manuel Miranda Serrano
+--@Fecha creación: 03/12/2025
+--@Descripción: Script de instalacion de wallet CLI en distribuciones linux basadas en ubuntu/debian
 set -e
 
 echo "Verificando Python 3..."
