@@ -14,6 +14,18 @@ OUTBOX_DIR = Path("outbox")
 
 
 def _read_passphrase(prompt: str = "Passphrase: ") -> str:
+    """
+    En esta función se lee una passphrase desde la entrada estándar y valida que no esté vacía.
+
+    Args:
+        prompt (str): Mensaje a mostrar al usuario al solicitar la passphrase.
+
+    Returns:
+        str: Es la passphrase ingresada por el usuario.
+
+    Raises:
+        SystemExit: Si la passphrase ingresada está vacía.
+    """
     pw = getpass(prompt)
     if not pw:
         raise SystemExit("Passphrase vacía; operación cancelada.")
@@ -21,6 +33,21 @@ def _read_passphrase(prompt: str = "Passphrase: ") -> str:
 
 
 def cmd_wallet_init(args: argparse.Namespace) -> None:
+    """
+    Es el c omando CLI para inicializar un nuevo keystore en disco. Crea un archivo de keystore protegido con una passphrase, validando que no
+    exista antes (al menos que se use un --force).
+
+    Args:
+        args (argparse.Namespace): Argumentos de línea de comandos que incluyen:
+            path (str | None): Ruta del keystore a crear.
+            force (bool): Indica si se debe sobrescribir un keystore existente.
+
+    Returns:
+        None ( ningun valor de retorno).
+
+    Raises:
+        SystemExit: Si el keystore ya existe y no se usa --force o si las passphrases ingresadas no coinciden.
+    """
     path = Path(args.path) if args.path else DEFAULT_KEYSTORE_PATH
     if path.exists() and not args.force:
         raise SystemExit(f"Ya existe {path}. Usa --force para sobrescribir (¡cuidado!).")
@@ -35,6 +62,23 @@ def cmd_wallet_init(args: argparse.Namespace) -> None:
 
 
 def cmd_wallet_address(args: argparse.Namespace) -> None:
+    """
+    Es el comando CLI para mostrar la dirección derivada del keystore actual.
+
+    Se pide la passphrase para descifrar el keystore, deriva la dirección a partir de la clave pública y la muestra junto con los metadatos básicos.
+
+    Args:
+        args (argparse.Namespace): Argumentos de línea de comandos donde se
+            puede incluir:
+            path (str | None): Ruta del keystore. Si no se especifica, se usa
+                DEFAULT_KEYSTORE_PATH.
+
+    Returns:
+        None
+
+    Raises:
+        SystemExit: Si no se encuentra el keystore en la ruta indicada, o si la passphrase es incorrecta o la carga del keystore falla.
+    """
     path = Path(args.path) if args.path else DEFAULT_KEYSTORE_PATH
     if not path.exists():
         raise SystemExit(f"No se encontró el keystore en: {path}")
@@ -55,6 +99,25 @@ def cmd_wallet_address(args: argparse.Namespace) -> None:
 
 
 def cmd_wallet_sign(args: argparse.Namespace) -> None:
+    """
+    Es el comando CLI para crear y firmar una transacción, guardándola en "outbox/".
+    Lo que hace es que carga la clave privada desde el keystore, construye una transacción con los parámetros indicados y la firma, en donde estará escribiendo el resultado en un archivo JSON.
+
+    Args:
+        args (argparse.Namespace): Argumentos de línea de comandos. Debe incluir:
+            keystore (str | None): Ruta del keystore (opcional).
+            to (str): Dirección de destino de la transacción.
+            value (str | int | float): Valor a transferir.
+            nonce (int): Nonce único de la transacción.
+            gas_limit (int | None): Límite de gas (opcional).
+            data_hex (str | None): Payload en hexadecimal (opcional).
+
+    Returns:
+        None
+
+    Raises:
+        SystemExit: Si no existe keystore en la ruta indicada o si la passphrase es incorrecta o no se puede cargar el keystore.
+    """
     path = Path(args.keystore) if args.keystore else DEFAULT_KEYSTORE_PATH
     if not path.exists():
         raise SystemExit(f"No existe keystore en {path}. Ejecuta primero 'wallet init'.")
@@ -86,6 +149,16 @@ def cmd_wallet_sign(args: argparse.Namespace) -> None:
     print(f"Transacción firmada y guardada en {out_path}")
     
 def cmd_wallet_recv(args: argparse.Namespace) -> None:
+    """
+    Es el comando CLI para procesar transacciones que entran desde el directorio "inbox/", lee los archivos JSON de la carpeta "inbox/", verifica cada transacción y
+    si es válida actualiza el nonce tracker y mueve el archivo a "verified/".
+
+    Args:
+        args (argparse.Namespace): Argumentos de línea de comandos (no se usan actualmente, pero mejor se mantiene por consistencia con la interfaz CLI).
+
+    Returns:
+        None (no hay valor de retorno).
+    """
     inbox_dir = Path("inbox")
     verified_dir = Path("verified")
     
@@ -163,6 +236,17 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv=None) -> None:
+    """
+    Esta funcion muy pequeña pero importante es el punto de entrada principal del programa CLI. Construye el parser de argumentos, interpreta los valores recibidos desde
+    la línea de comandos (o desde la lista opcional "argv") y ejecuta la función que esta relacionada al subcomando seleccionado.
+
+    Args:
+        argv (list[str] | None): Lista opcional de argumentos que sustituye a los provenientes de la línea de comandos. Si es None, se usan
+            automáticamente los argumentos del entorno del sistema.
+
+    Returns:
+        None (ningun valor de retorno).
+    """
     parser = build_parser()
     args = parser.parse_args(argv)
     args.func(args)
