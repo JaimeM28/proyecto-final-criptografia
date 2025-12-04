@@ -30,13 +30,16 @@ def kdf_argon2id(
     La función aplica Argon2id sobre la passphrase y una sal aleatoria
     para obtener una clave de longitud fija-
 
+    Args:
     :param passphrase: Passphrase en texto claro introducida por el usuario.
     :param salt: Sal aleatoria usada en el KDF (mínimo 16 bytes).
     :param t_cost: Número de iteraciones de Argon2id (parámetro de tiempo).
     :param m_cost: Memoria en KiB utilizada por Argon2id.
     :param parallelism: Grado de paralelismo (número de lanes).
     :param key_len: Longitud de la clave derivada en bytes.
+
     :return: Clave derivada como bytes.
+
     :raises ValueError: Si la sal es demasiado corta o de tipo inválido.
     """
     if not isinstance(salt, (bytes, bytearray)) or len(salt) < 16:
@@ -55,19 +58,23 @@ def b64e(b: bytes) -> str:
     """
     Codifica datos binarios en Base64 y devuelve una cadena ASCII.
 
+    Args:
     :param b: Datos binarios a codificar.
-    :return: Cadena Base64 en ASCII.
+
+    :returns: Cadena Base64 en ASCII.
     """
     return base64.b64encode(b).decode("ascii")
 
 def aesgcm_encrypt(key: bytes, plaintext: bytes, *, aad: Optional[bytes] = None) -> Tuple[bytes, bytes, bytes]:
     """
     Cifra datos con AES-256-GCM y separa nonce, ciphertext y tag.
-
+    Args:
     :param key: Clave simétrica de 32 bytes (AES-256).
     :param plaintext: Datos en claro a cifrar.
     :param aad: Datos adicionales autenticados (no cifrados), o None.
+
     :return: Tupla (nonce, ciphertext, tag).
+
     :raises ValueError: Si la longitud de la clave no es de 32 bytes.
     """
     if len(key) != 32:
@@ -82,9 +89,10 @@ def _keystore_checksum(doc: dict) -> str:
     """
     Calcula el checksum de integridad de un JSON canonico.
 
-    El checksum se define como el hash SHA-256 del JSON canónico sin el campo ``checksum``.
+    El checksum se define como el hash SHA-256 del JSON canónico sin el campo "checksum".
+    Args:
+    :param doc: Archivo que contiene el json canonico sin el campo "checksum".
 
-    :param doc: Archivo que contiene el json canonico sin el campo ``checksum``.
     :return: Hash SHA-256 en hexadecimal (64 caracteres).
     """
     return hashlib.sha256(canonical_json_bytes(doc)).hexdigest()
@@ -95,9 +103,12 @@ def create(passphrase: str, path: Path = DEFAULT_KEYSTORE_PATH) -> dict:
     una llave derivada con Argon2id y genera un archivo llamado keystore.json 
     para almacenar las claves e información.
 
+    Args:
     :param passphrase: Passphrase usada para derivar la llave simétrica.
     :param path: Ruta donde se guardará el archivo json.
+
     :return: Documento JSON (dict) que se guardó en disco.
+    :raises: OSError: si ocurre un error al escribir el archivo en disco.
     """
 
     # Generacion de claves Ed25519
@@ -138,11 +149,28 @@ def create(passphrase: str, path: Path = DEFAULT_KEYSTORE_PATH) -> dict:
     return doc
 
 def b64d(s: str) -> bytes:
-    """Decodifica Base64 (string -> bytes)."""
+    """Decodifica Base64 (string -> bytes).
+
+    Args: s (str): Cadena en Base64.
+
+    Returns: bytes: Datos binarios decodificados.
+    
+    """
     return base64.b64decode(s.encode("ascii"))
 
 def aesgcm_decrypt(key: bytes, nonce: bytes, ciphertext: bytes, tag: bytes, *, aad: Optional[bytes] = None) -> bytes:
-    """Operacion inversa de aesgcm_encrypt."""
+    """Operacion inversa de aesgcm_encrypt.
+
+    Args: key (bytes): Clave simétrica de 32 bytes (AES-256).
+            nonce (bytes): Nonce usado en el cifrado (12 bytes).
+            ciphertext (bytes): Datos cifrados. 
+            tag (bytes): Tag de autenticación (16 bytes).
+
+    Returns: bytes: Datos en claro descifrados.
+
+    Raises: ValueError: Si la longitud de la clave no es de 32 bytes.
+    
+    """
     if len(key) != 32:
         raise ValueError("AESGCM requiere llave de 32 bytes (256-bit)")
     aes = AESGCM(key)
@@ -150,7 +178,16 @@ def aesgcm_decrypt(key: bytes, nonce: bytes, ciphertext: bytes, tag: bytes, *, a
     return aes.decrypt(nonce, ct_with_tag, aad)
 
 def kdf_argon2id_from_params(passphrase: str, kdf_params: dict) -> bytes:
-    """Re-deriva la clave simétrica a partir de los parámetros guardados en el keystore."""
+    """Re-deriva la clave simétrica a partir de los parámetros guardados en el keystore.
+    
+    Args: passphrase (str): Passphrase introducida por el usuario.
+            kdf_params (dict): Parámetros del KDF extraídos del keystore.
+
+    Returns: bytes: Clave simétrica derivada.
+
+    Raises: ValueError: Si los parámetros del KDF son inválidos.
+    
+    """
     salt = b64d(kdf_params["salt_b64"])
     return kdf_argon2id(
         passphrase,
@@ -174,6 +211,15 @@ def load(passphrase: str, path: Path = DEFAULT_KEYSTORE_PATH) -> dict:
       "pubkey_bytes": bytes,
       "doc": dict del keystore
     }
+    Args: passphrase (str): Passphrase para derivar la clave simétrica.
+            path (Path): Ruta del archivo keystore.json.
+
+    Returns: dict: Diccionario con la clave privada, clave pública y el documento del keystore.
+
+    Raises: FileNotFoundError: Si el archivo keystore no existe.
+            json.JSONDecodeError: Si el archivo no es un JSON válido.
+            valueError: Si el checksum no coincide o si la KDF no es soportada.
+
     """
     with path.open("r", encoding="utf-8") as f:
         full_doc = json.load(f)
