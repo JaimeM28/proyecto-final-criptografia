@@ -2,9 +2,10 @@ from pathlib import Path
 from getpass import getpass
 import argparse
 import json
+import base64
 
 from .keystore import create, DEFAULT_KEYSTORE_PATH, load
-from .address import load_address_from_keystore
+from .address import address_from_pubkey
 from .tx import Tx
 from .signer import sign as sign_tx
 from .verifier import verify_tx, commit_verification
@@ -38,10 +39,17 @@ def cmd_wallet_address(args: argparse.Namespace) -> None:
     if not path.exists():
         raise SystemExit(f"No se encontró el keystore en: {path}")
 
-    scheme, pubkey_b64, address = load_address_from_keystore(path)
+    # Pedimos passphrase y validamos el keystore
+    passphrase = _read_passphrase("Passphrase: ")
+    state = load(passphrase, path)  # si la pass es incorrecta, aquí truena
+
+    doc = state["doc"]
+    pubkey_b64 = doc["pubkey_b64"]
+    pubkey_bytes = base64.b64decode(pubkey_b64)
+    address = address_from_pubkey(pubkey_bytes)
 
     print(f"Keystore: {path}")
-    print(f"Esquema: {scheme}")
+    print(f"Esquema: {doc['scheme']}")
     print(f"Dirección: {address}")
     print(f"Public key (b64): {pubkey_b64}")
 
