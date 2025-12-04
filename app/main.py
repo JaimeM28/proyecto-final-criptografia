@@ -5,7 +5,7 @@ import json
 import base64
 
 from .keystore import create, DEFAULT_KEYSTORE_PATH, load
-from .address import address_from_pubkey
+from .address import load_address_from_keystore, address_from_pubkey
 from .tx import Tx
 from .signer import sign as sign_tx
 from .verifier import verify_tx, commit_verification
@@ -63,7 +63,8 @@ def cmd_wallet_sign(args: argparse.Namespace) -> None:
     state = load(passphrase, path)
     sk = state["sk"]
 
-    from_addr = state["doc"]["pubkey_b64"]
+    pubkey_bytes = state["pubkey_bytes"] # Usado para derivar la dirección
+    from_addr = address_from_pubkey(pubkey_bytes)
 
     tx = Tx(
         from_addr=from_addr,
