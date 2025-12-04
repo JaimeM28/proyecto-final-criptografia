@@ -7,6 +7,7 @@ from .keystore import create, DEFAULT_KEYSTORE_PATH, load
 from .address import load_address_from_keystore
 from .tx import Tx
 from .signer import sign as sign_tx
+from .verifier import verify_tx, commit_verification
 
 OUTBOX_DIR = Path("outbox")
 
@@ -75,6 +76,50 @@ def cmd_wallet_sign(args: argparse.Namespace) -> None:
         json.dump(signed_pkg, f, indent=2, ensure_ascii=False)
 
     print(f"Transacción firmada y guardada en {out_path}")
+    
+def cmd_wallet_recv(args: argparse.Namespace) -> None:
+    inbox_dir = Path("inbox")
+    verified_dir = Path("verified")
+    
+    # Asegurar que existan los directorios
+    if not inbox_dir.exists():
+        print(f"No existe el directorio {inbox_dir}. Nada que recibir.")
+        return
+    verified_dir.mkdir(exist_ok=True)
+
+    # Filtrar solo archivos JSON
+    files = list(inbox_dir.glob("*.json"))
+    
+    if not files:
+        print("Bandeja de entrada vacía.")
+        return
+
+    print(f"Procesando {len(files)} transacciones en '{inbox_dir}'...\n")
+
+    for file_path in files:
+        try:
+            print(f"Verificando: {file_path.name} ... ", end="", flush=True)
+            
+            with file_path.open("r", encoding="utf-8") as f:
+                signed_tx = json.load(f)
+
+            is_valid, reason = verify_tx(signed_tx)
+
+            if is_valid:
+                # 1. Actualizar el Nonce Tracker
+                commit_verification(signed_tx)
+                
+                # 2. Mover a carpeta verified
+                destination = verified_dir / file_path.name
+                file_path.rename(destination)
+                print(f"VÁLIDA -> Movida a {destination}")
+            else:
+                print(f"INVÁLIDA ({reason})")
+
+        except json.JSONDecodeError:
+            print("ERROR (JSON corrupto)")
+        except Exception as e:
+            print(f"ERROR ({str(e)})")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -101,6 +146,10 @@ def build_parser() -> argparse.ArgumentParser:
     sp_sign.add_argument("--data_hex", help="Payload en hex (opcional)")
     sp_sign.add_argument("--keystore", help="Ruta del keystore (opcional)")
     sp_sign.set_defaults(func=cmd_wallet_sign)
+    
+    # wallet recv
+    sp_recv = sub.add_parser("recv", help="Procesar transacciones de inbox/")
+    sp_recv.set_defaults(func=cmd_wallet_recv)
 
     return parser
 
