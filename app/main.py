@@ -85,7 +85,11 @@ def cmd_wallet_address(args: argparse.Namespace) -> None:
 
     # Pedimos passphrase y validamos el keystore
     passphrase = _read_passphrase("Passphrase: ")
-    state = load(passphrase, path)  # si la pass es incorrecta, aquí truena
+    try:
+        
+        state = load(passphrase, path)  # si la pass es incorrecta, aquí truena
+    except Exception as e:
+        raise SystemExit(f"Passphrase incorrecta o error al cargar el keystore")
 
     doc = state["doc"]
     pubkey_b64 = doc["pubkey_b64"]
@@ -123,7 +127,10 @@ def cmd_wallet_sign(args: argparse.Namespace) -> None:
         raise SystemExit(f"No existe keystore en {path}. Ejecuta primero 'wallet init'.")
 
     passphrase = _read_passphrase("Passphrase: ")
-    state = load(passphrase, path)
+    try:
+        state = load(passphrase, path)
+    except Exception as e:
+        raise SystemExit(f"Passphrase incorrecta")
     sk = state["sk"]
 
     pubkey_bytes = state["pubkey_bytes"] # Usado para derivar la dirección
