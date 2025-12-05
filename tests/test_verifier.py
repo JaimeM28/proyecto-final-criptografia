@@ -2,6 +2,7 @@
 import json
 import base64
 from pathlib import Path
+from app.signer import sign 
 
 from nacl.signing import SigningKey
 from nacl.exceptions import BadSignatureError
@@ -62,7 +63,6 @@ def test_verify_valid_transaction():
     assert ok is True
     assert reason is None
 
-
 def test_verify_invalid_signature():
     sk = SigningKey.generate()
     pub = sk.verify_key.encode()
@@ -79,19 +79,23 @@ def test_verify_invalid_signature():
     ok, reason = verify_tx(signed_tx)
     assert ok is False
     assert "Firma digital inválida" in reason
-
-
+    
 def test_verify_wrong_address():
-    sk = SigningKey.generate()
-    pub = sk.verify_key.encode()
-    real_addr = address_from_pubkey(pub)
+    sk_atacante = SigningKey.generate()
+    direccion_victima = "0x1234567890000000000000000000000000000000"
 
-    signed_tx = make_signed_tx(sk, real_addr, "0xBBBB", 1)
+    tx_data = {
+        "from": direccion_victima, 
+        "to": "0xDestino", 
+        "value": "100", 
+        "nonce": 1
+    }
 
-    # Cambiar el campo from por una address falsa
-    signed_tx["tx"]["from"] = "0x1234567890000000000000000000000000000000"
+    signed_tx = sign(sk_atacante, tx_data)
 
+    # Verificamos
     ok, reason = verify_tx(signed_tx)
+
     assert ok is False
     assert "Dirección no coincide" in reason
 
