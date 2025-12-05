@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module app.address</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="app.html" class="white">app</a>.address</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cjonat%5Conedrive%5Cescritorio%5Cuni%5C9no%20semestre%5Ccriptografia%5Cproyecto%20final%20criptografia%5Capp%5Caddress.py">c:\users\jonat\onedrive\escritorio\uni\9no semestre\criptografia\proyecto final criptografia\app\address.py</a></td></tr></table>
+    <p><span class="code">#&nbsp;app/address.py</span></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="base64.html">base64</a><br>
+</td><td class="multicolumn"><a href="json.html">json</a><br>
+</td><td class="multicolumn"><a href="Crypto.Hash.keccak.html">Crypto.Hash.keccak</a><br>
+</td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-address_from_pubkey"><strong>address_from_pubkey</strong></a>(pubkey_bytes: bytes) -&gt; str</dt><dd><span class="code">Aquí&nbsp;se&nbsp;deriva&nbsp;la&nbsp;dirección&nbsp;hexadecimal&nbsp;a&nbsp;partir&nbsp;de&nbsp;una&nbsp;clave&nbsp;pública.<br>
+El&nbsp;procedimiento&nbsp;sigue&nbsp;la&nbsp;especificación&nbsp;Ethereum‑like:&nbsp;dirección&nbsp;=&nbsp;KECCAK‑256(pubkey)[‑20:]&nbsp;donde&nbsp;vemos&nbsp;que&nbsp;toma&nbsp;los&nbsp;últimos&nbsp;20&nbsp;bytes&nbsp;del&nbsp;hash.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pubkey_bytes&nbsp;(bytes):&nbsp;Es&nbsp;la&nbsp;clave&nbsp;pública&nbsp;en&nbsp;bytes&nbsp;(normalmente&nbsp;32&nbsp;bytes&nbsp;para&nbsp;Ed25519).<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;Dirección&nbsp;derivada&nbsp;en&nbsp;formato&nbsp;hexadecimal&nbsp;con&nbsp;prefijo&nbsp;"0x".<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TypeError:&nbsp;Si&nbsp;"pubkey_bytes"&nbsp;no&nbsp;es&nbsp;bytes.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ValueError:&nbsp;Si&nbsp;la&nbsp;clave&nbsp;pública&nbsp;no&nbsp;tiene&nbsp;una&nbsp;longitud&nbsp;válida.</span></dd></dl>
+ <dl><dt><a name="-keccak256"><strong>keccak256</strong></a>(data: bytes) -&gt; bytes</dt><dd><span class="code">En&nbsp;esta&nbsp;función&nbsp;se&nbsp;calcula&nbsp;el&nbsp;hash&nbsp;KECCAK-256&nbsp;de&nbsp;los&nbsp;datos&nbsp;proporcionados,&nbsp;decidimos&nbsp;tomar&nbsp;esta&nbsp;sugerencia&nbsp;la&nbsp;tomamos&nbsp;por&nbsp;parte&nbsp;de&nbsp;la&nbsp;recomendación&nbsp;del&nbsp;documento&nbsp;del&nbsp;proyecto.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data&nbsp;(bytes):&nbsp;Son&nbsp;los&nbsp;datos&nbsp;de&nbsp;entrada&nbsp;a&nbsp;hashear.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bytes:&nbsp;Hash&nbsp;KECCAK-256&nbsp;de&nbsp;32&nbsp;bytes.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;TypeError:&nbsp;Si&nbsp;el&nbsp;"data"&nbsp;no&nbsp;es&nbsp;de&nbsp;tipo&nbsp;bytes.</span></dd></dl>
+ <dl><dt><a name="-load_address_from_keystore"><strong>load_address_from_keystore</strong></a>(path: pathlib.Path | None = None) -&gt; tuple[str, str, str]</dt><dd><span class="code">En&nbsp;esta&nbsp;funcion&nbsp;se&nbsp;lee&nbsp;un&nbsp;archivo&nbsp;de&nbsp;keystore&nbsp;y&nbsp;deriva&nbsp;la&nbsp;dirección&nbsp;contenida.<br>
+El&nbsp;keystore&nbsp;debe&nbsp;contener&nbsp;al&nbsp;menos&nbsp;el&nbsp;campo&nbsp;"pubkey_b64".&nbsp;Se&nbsp;decodifica&nbsp;la&nbsp;clave&nbsp;pública,&nbsp;se&nbsp;deriva&nbsp;la&nbsp;dirección&nbsp;y&nbsp;se&nbsp;regresan&nbsp;los&nbsp;valores.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;(Path&nbsp;|&nbsp;None):&nbsp;Ruta&nbsp;del&nbsp;archivo&nbsp;keystore.json.&nbsp;Si&nbsp;es&nbsp;None&nbsp;se&nbsp;usa&nbsp;DEFAULT_KEYSTORE_PATH.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;tuple[str,&nbsp;str,&nbsp;str]:&nbsp;(scheme,&nbsp;pubkey_b64,&nbsp;address_hex)<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FileNotFoundError:&nbsp;Si&nbsp;el&nbsp;archivo&nbsp;de&nbsp;keystore&nbsp;no&nbsp;existe.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;KeyError:&nbsp;Si&nbsp;faltan&nbsp;campos&nbsp;obligatorios&nbsp;como&nbsp;"pubkey_b64".<br>
+&nbsp;&nbsp;&nbsp;&nbsp;json.JSONDecodeError:&nbsp;Si&nbsp;es&nbsp;que&nbsp;el&nbsp;archivo&nbsp;contiene&nbsp;JSON&nbsp;inválido.</span></dd></dl>
+</td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>DEFAULT_KEYSTORE_PATH</strong> = WindowsPath('app/keystore.json')</td></tr></table>
+</body></html>

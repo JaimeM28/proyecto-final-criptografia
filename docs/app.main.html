@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module app.main</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="app.html" class="white">app</a>.main</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cjonat%5Conedrive%5Cescritorio%5Cuni%5C9no%20semestre%5Ccriptografia%5Cproyecto%20final%20criptografia%5Capp%5Cmain.py">c:\users\jonat\onedrive\escritorio\uni\9no semestre\criptografia\proyecto final criptografia\app\main.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="argparse.html">argparse</a><br>
+</td><td class="multicolumn"><a href="base64.html">base64</a><br>
+</td><td class="multicolumn"><a href="json.html">json</a><br>
+</td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-build_parser"><strong>build_parser</strong></a>() -&gt; argparse.ArgumentParser</dt></dl>
+ <dl><dt><a name="-cmd_wallet_address"><strong>cmd_wallet_address</strong></a>(args: argparse.Namespace) -&gt; None</dt><dd><span class="code">Es&nbsp;el&nbsp;comando&nbsp;CLI&nbsp;para&nbsp;mostrar&nbsp;la&nbsp;dirección&nbsp;derivada&nbsp;del&nbsp;keystore&nbsp;actual.<br>
+&nbsp;<br>
+Se&nbsp;pide&nbsp;la&nbsp;passphrase&nbsp;para&nbsp;descifrar&nbsp;el&nbsp;keystore,&nbsp;deriva&nbsp;la&nbsp;dirección&nbsp;a&nbsp;partir&nbsp;de&nbsp;la&nbsp;clave&nbsp;pública&nbsp;y&nbsp;la&nbsp;muestra&nbsp;junto&nbsp;con&nbsp;los&nbsp;metadatos&nbsp;básicos.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;args&nbsp;(argparse.Namespace):&nbsp;Argumentos&nbsp;de&nbsp;línea&nbsp;de&nbsp;comandos&nbsp;donde&nbsp;se<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;puede&nbsp;incluir:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;(str&nbsp;|&nbsp;None):&nbsp;Ruta&nbsp;del&nbsp;keystore.&nbsp;Si&nbsp;no&nbsp;se&nbsp;especifica,&nbsp;se&nbsp;usa<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DEFAULT_KEYSTORE_PATH.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SystemExit:&nbsp;Si&nbsp;no&nbsp;se&nbsp;encuentra&nbsp;el&nbsp;keystore&nbsp;en&nbsp;la&nbsp;ruta&nbsp;indicada,&nbsp;o&nbsp;si&nbsp;la&nbsp;passphrase&nbsp;es&nbsp;incorrecta&nbsp;o&nbsp;la&nbsp;carga&nbsp;del&nbsp;keystore&nbsp;falla.</span></dd></dl>
+ <dl><dt><a name="-cmd_wallet_init"><strong>cmd_wallet_init</strong></a>(args: argparse.Namespace) -&gt; None</dt><dd><span class="code">Es&nbsp;el&nbsp;c&nbsp;omando&nbsp;CLI&nbsp;para&nbsp;inicializar&nbsp;un&nbsp;nuevo&nbsp;keystore&nbsp;en&nbsp;disco.&nbsp;Crea&nbsp;un&nbsp;archivo&nbsp;de&nbsp;keystore&nbsp;protegido&nbsp;con&nbsp;una&nbsp;passphrase,&nbsp;validando&nbsp;que&nbsp;no<br>
+exista&nbsp;antes&nbsp;(al&nbsp;menos&nbsp;que&nbsp;se&nbsp;use&nbsp;un&nbsp;--force).<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;args&nbsp;(argparse.Namespace):&nbsp;Argumentos&nbsp;de&nbsp;línea&nbsp;de&nbsp;comandos&nbsp;que&nbsp;incluyen:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;path&nbsp;(str&nbsp;|&nbsp;None):&nbsp;Ruta&nbsp;del&nbsp;keystore&nbsp;a&nbsp;crear.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;force&nbsp;(bool):&nbsp;Indica&nbsp;si&nbsp;se&nbsp;debe&nbsp;sobrescribir&nbsp;un&nbsp;keystore&nbsp;existente.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None&nbsp;(&nbsp;ningun&nbsp;valor&nbsp;de&nbsp;retorno).<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SystemExit:&nbsp;Si&nbsp;el&nbsp;keystore&nbsp;ya&nbsp;existe&nbsp;y&nbsp;no&nbsp;se&nbsp;usa&nbsp;--force&nbsp;o&nbsp;si&nbsp;las&nbsp;passphrases&nbsp;ingresadas&nbsp;no&nbsp;coinciden.</span></dd></dl>
+ <dl><dt><a name="-cmd_wallet_recv"><strong>cmd_wallet_recv</strong></a>(args: argparse.Namespace) -&gt; None</dt><dd><span class="code">Es&nbsp;el&nbsp;comando&nbsp;CLI&nbsp;para&nbsp;procesar&nbsp;transacciones&nbsp;que&nbsp;entran&nbsp;desde&nbsp;el&nbsp;directorio&nbsp;"inbox/",&nbsp;lee&nbsp;los&nbsp;archivos&nbsp;JSON&nbsp;de&nbsp;la&nbsp;carpeta&nbsp;"inbox/",&nbsp;verifica&nbsp;cada&nbsp;transacción&nbsp;y<br>
+si&nbsp;es&nbsp;válida&nbsp;actualiza&nbsp;el&nbsp;nonce&nbsp;tracker&nbsp;y&nbsp;mueve&nbsp;el&nbsp;archivo&nbsp;a&nbsp;"verified/".<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;args&nbsp;(argparse.Namespace):&nbsp;Argumentos&nbsp;de&nbsp;línea&nbsp;de&nbsp;comandos&nbsp;(no&nbsp;se&nbsp;usan&nbsp;actualmente,&nbsp;pero&nbsp;mejor&nbsp;se&nbsp;mantiene&nbsp;por&nbsp;consistencia&nbsp;con&nbsp;la&nbsp;interfaz&nbsp;CLI).<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None&nbsp;(no&nbsp;hay&nbsp;valor&nbsp;de&nbsp;retorno).</span></dd></dl>
+ <dl><dt><a name="-cmd_wallet_sign"><strong>cmd_wallet_sign</strong></a>(args: argparse.Namespace) -&gt; None</dt><dd><span class="code">Es&nbsp;el&nbsp;comando&nbsp;CLI&nbsp;para&nbsp;crear&nbsp;y&nbsp;firmar&nbsp;una&nbsp;transacción,&nbsp;guardándola&nbsp;en&nbsp;"outbox/".<br>
+Lo&nbsp;que&nbsp;hace&nbsp;es&nbsp;que&nbsp;carga&nbsp;la&nbsp;clave&nbsp;privada&nbsp;desde&nbsp;el&nbsp;keystore,&nbsp;construye&nbsp;una&nbsp;transacción&nbsp;con&nbsp;los&nbsp;parámetros&nbsp;indicados&nbsp;y&nbsp;la&nbsp;firma,&nbsp;en&nbsp;donde&nbsp;estará&nbsp;escribiendo&nbsp;el&nbsp;resultado&nbsp;en&nbsp;un&nbsp;archivo&nbsp;JSON.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;args&nbsp;(argparse.Namespace):&nbsp;Argumentos&nbsp;de&nbsp;línea&nbsp;de&nbsp;comandos.&nbsp;Debe&nbsp;incluir:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;keystore&nbsp;(str&nbsp;|&nbsp;None):&nbsp;Ruta&nbsp;del&nbsp;keystore&nbsp;(opcional).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;(str):&nbsp;Dirección&nbsp;de&nbsp;destino&nbsp;de&nbsp;la&nbsp;transacción.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;(str&nbsp;|&nbsp;int&nbsp;|&nbsp;float):&nbsp;Valor&nbsp;a&nbsp;transferir.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nonce&nbsp;(int):&nbsp;Nonce&nbsp;único&nbsp;de&nbsp;la&nbsp;transacción.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gas_limit&nbsp;(int&nbsp;|&nbsp;None):&nbsp;Límite&nbsp;de&nbsp;gas&nbsp;(opcional).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_hex&nbsp;(str&nbsp;|&nbsp;None):&nbsp;Payload&nbsp;en&nbsp;hexadecimal&nbsp;(opcional).<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SystemExit:&nbsp;Si&nbsp;no&nbsp;existe&nbsp;keystore&nbsp;en&nbsp;la&nbsp;ruta&nbsp;indicada&nbsp;o&nbsp;si&nbsp;la&nbsp;passphrase&nbsp;es&nbsp;incorrecta&nbsp;o&nbsp;no&nbsp;se&nbsp;puede&nbsp;cargar&nbsp;el&nbsp;keystore.</span></dd></dl>
+ <dl><dt><a name="-main"><strong>main</strong></a>(argv=None) -&gt; None</dt><dd><span class="code">Esta&nbsp;funcion&nbsp;muy&nbsp;pequeña&nbsp;pero&nbsp;importante&nbsp;es&nbsp;el&nbsp;punto&nbsp;de&nbsp;entrada&nbsp;principal&nbsp;del&nbsp;programa&nbsp;CLI.&nbsp;Construye&nbsp;el&nbsp;parser&nbsp;de&nbsp;argumentos,&nbsp;interpreta&nbsp;los&nbsp;valores&nbsp;recibidos&nbsp;desde<br>
+la&nbsp;línea&nbsp;de&nbsp;comandos&nbsp;(o&nbsp;desde&nbsp;la&nbsp;lista&nbsp;opcional&nbsp;"argv")&nbsp;y&nbsp;ejecuta&nbsp;la&nbsp;función&nbsp;que&nbsp;esta&nbsp;relacionada&nbsp;al&nbsp;subcomando&nbsp;seleccionado.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;argv&nbsp;(list[str]&nbsp;|&nbsp;None):&nbsp;Lista&nbsp;opcional&nbsp;de&nbsp;argumentos&nbsp;que&nbsp;sustituye&nbsp;a&nbsp;los&nbsp;provenientes&nbsp;de&nbsp;la&nbsp;línea&nbsp;de&nbsp;comandos.&nbsp;Si&nbsp;es&nbsp;None,&nbsp;se&nbsp;usan<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;automáticamente&nbsp;los&nbsp;argumentos&nbsp;del&nbsp;entorno&nbsp;del&nbsp;sistema.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None&nbsp;(ningun&nbsp;valor&nbsp;de&nbsp;retorno).</span></dd></dl>
+</td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>DEFAULT_KEYSTORE_PATH</strong> = WindowsPath('app/keystore.json')<br>
+<strong>OUTBOX_DIR</strong> = WindowsPath('outbox')</td></tr></table>
+</body></html>

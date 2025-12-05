@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module app.signer</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="app.html" class="white">app</a>.signer</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cjonat%5Conedrive%5Cescritorio%5Cuni%5C9no%20semestre%5Ccriptografia%5Cproyecto%20final%20criptografia%5Capp%5Csigner.py">c:\users\jonat\onedrive\escritorio\uni\9no semestre\criptografia\proyecto final criptografia\app\signer.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="json.html">json</a><br>
+</td><td class="multicolumn"></td><td class="multicolumn"></td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-sign"><strong>sign</strong></a>(private_key: nacl.signing.SigningKey, tx: Dict[str, Any]) -&gt; Dict[str, Any]</dt><dd><span class="code">Signer.<a href="#-sign">sign</a>(private_key,&nbsp;tx)&nbsp;-&gt;&nbsp;SignedTx<br>
+&nbsp;<br>
+tx:&nbsp;dict&nbsp;con&nbsp;la&nbsp;transacción&nbsp;(from,&nbsp;to,&nbsp;value,&nbsp;nonce,&nbsp;etc.)<br>
+Devuelve&nbsp;paquete&nbsp;firmado&nbsp;listo&nbsp;para&nbsp;guardar&nbsp;en&nbsp;outbox/.<br>
+&nbsp;<br>
+Args:&nbsp;private_key&nbsp;(SigningKey):&nbsp;Clave&nbsp;privada&nbsp;Ed25519&nbsp;para&nbsp;firmar&nbsp;la&nbsp;transacción.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tx&nbsp;(Dict[str,&nbsp;Any]):&nbsp;Diccionario&nbsp;que&nbsp;representa&nbsp;la&nbsp;transacción&nbsp;a&nbsp;firmar.<br>
+&nbsp;<br>
+returns:&nbsp;Dict[str,&nbsp;Any]:&nbsp;Diccionario&nbsp;que&nbsp;representa&nbsp;la&nbsp;transacción&nbsp;firmada,&nbsp;incluyendo&nbsp;la&nbsp;firma&nbsp;y&nbsp;la&nbsp;clave&nbsp;pública&nbsp;en&nbsp;base64.<br>
+&nbsp;<br>
+Raises:&nbsp;typeError:&nbsp;Si&nbsp;tx&nbsp;no&nbsp;es&nbsp;un&nbsp;diccionario.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nacl.exceptions.CryptoError:&nbsp;Si&nbsp;la&nbsp;firma&nbsp;falla&nbsp;por&nbsp;alguna&nbsp;razón.</span></dd></dl>
+</td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>Dict</strong> = typing.Dict</td></tr></table>
+</body></html>

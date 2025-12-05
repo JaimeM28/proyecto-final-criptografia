@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module app.verifier</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="app.html" class="white">app</a>.verifier</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cjonat%5Conedrive%5Cescritorio%5Cuni%5C9no%20semestre%5Ccriptografia%5Cproyecto%20final%20criptografia%5Capp%5Cverifier.py">c:\users\jonat\onedrive\escritorio\uni\9no semestre\criptografia\proyecto final criptografia\app\verifier.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="base64.html">base64</a><br>
+</td><td class="multicolumn"><a href="json.html">json</a><br>
+</td><td class="multicolumn"></td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-commit_verification"><strong>commit_verification</strong></a>(signed_tx: Dict[str, Any]) -&gt; None</dt><dd><span class="code">Marca&nbsp;una&nbsp;transacción&nbsp;verificada&nbsp;como&nbsp;aceptada&nbsp;actualizando&nbsp;el&nbsp;nonce&nbsp;tracker.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;signed_tx&nbsp;(Dict[str,&nbsp;Any]):&nbsp;Paquete&nbsp;de&nbsp;transacción&nbsp;firmada&nbsp;que&nbsp;incluye&nbsp;el&nbsp;campo&nbsp;"tx"&nbsp;con&nbsp;los&nbsp;campos&nbsp;"from"&nbsp;y&nbsp;"nonce".<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None&nbsp;(&nbsp;no&nbsp;devuelve&nbsp;nada&nbsp;).<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;KeyError:&nbsp;Si&nbsp;el&nbsp;paquete&nbsp;no&nbsp;contiene&nbsp;los&nbsp;campos&nbsp;esperados.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;OSError:&nbsp;Si&nbsp;ocurre&nbsp;un&nbsp;error&nbsp;al&nbsp;guardar&nbsp;el&nbsp;nonce&nbsp;tracker&nbsp;en&nbsp;disco.</span></dd></dl>
+ <dl><dt><a name="-verify_tx"><strong>verify_tx</strong></a>(signed_tx: Dict[str, Any]) -&gt; Tuple[bool, Optional[str]]</dt><dd><span class="code">Verifica&nbsp;criptográficamente&nbsp;una&nbsp;transacción&nbsp;firmada&nbsp;y&nbsp;valida&nbsp;contra&nbsp;ataques&nbsp;de&nbsp;replay.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;signed_tx&nbsp;(Dict[str,&nbsp;Any])&nbsp;:&nbsp;Paquete&nbsp;de&nbsp;transacción&nbsp;firmada:&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;"tx":&nbsp;Dict&nbsp;con&nbsp;los&nbsp;campos&nbsp;de&nbsp;la&nbsp;transacción&nbsp;(incluyendo&nbsp;"from"&nbsp;y&nbsp;"nonce").<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;"signature_b64":&nbsp;Firma&nbsp;digital&nbsp;en&nbsp;Base64.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;"pubkey_b64":&nbsp;Clave&nbsp;pública&nbsp;en&nbsp;Base64.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;"sig_scheme":&nbsp;Esquema&nbsp;de&nbsp;firma&nbsp;(debe&nbsp;ser&nbsp;"Ed25519").<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Tuple[bool,&nbsp;Optional[str]]:&nbsp;Una&nbsp;tupla&nbsp;donde&nbsp;el&nbsp;primer&nbsp;elemento&nbsp;es&nbsp;True&nbsp;si&nbsp;la&nbsp;verificación&nbsp;fue&nbsp;exitosa,&nbsp;o&nbsp;False&nbsp;si&nbsp;falló.<br>
+&nbsp;<br>
+Raises:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;lanza&nbsp;excepciones&nbsp;hacia&nbsp;afuera:&nbsp;cualquier&nbsp;error&nbsp;interno&nbsp;se&nbsp;captura<br>
+&nbsp;&nbsp;&nbsp;&nbsp;y&nbsp;se&nbsp;reporta&nbsp;como&nbsp;(False,&nbsp;"mensaje&nbsp;de&nbsp;error").</span></dd></dl>
+</td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>Dict</strong> = typing.Dict<br>
+<strong>NONCE_TRACKER_PATH</strong> = WindowsPath('app/nonce_tracker.json')<br>
+<strong>Optional</strong> = typing.Optional<br>
+<strong>Tuple</strong> = typing.Tuple</td></tr></table>
+</body></html>

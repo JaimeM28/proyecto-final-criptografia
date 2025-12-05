@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module app.tx</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title"><a href="app.html" class="white">app</a>.tx</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cjonat%5Conedrive%5Cescritorio%5Cuni%5C9no%20semestre%5Ccriptografia%5Cproyecto%20final%20criptografia%5Capp%5Ctx.py">c:\users\jonat\onedrive\escritorio\uni\9no semestre\criptografia\proyecto final criptografia\app\tx.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor index-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Classes</strong></td></tr>
+    
+<tr><td class="decor index-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl>
+<dt class="heading-text"><a href="builtins.html#object">builtins.object</a>
+</dt><dd>
+<dl>
+<dt class="heading-text"><a href="app.tx.html#Tx">Tx</a>
+</dt></dl>
+</dd>
+</dl>
+ <p>
+<table class="section">
+<tr class="decor title-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><a name="Tx">class <strong>Tx</strong></a>(<a href="builtins.html#object">builtins.object</a>)</td></tr>
+    
+<tr><td class="decor title-decor" rowspan=2><span class="code">&nbsp;&nbsp;&nbsp;</span></td>
+<td class="decor title-decor" colspan=2><span class="code"><a href="#Tx">Tx</a>(from_addr:&nbsp;str,&nbsp;to_addr:&nbsp;str,&nbsp;value:&nbsp;str,&nbsp;nonce:&nbsp;int,&nbsp;gas_limit:&nbsp;Optional[int]&nbsp;=&nbsp;None,&nbsp;data_hex:&nbsp;Optional[str]&nbsp;=&nbsp;None,&nbsp;timestamp:&nbsp;Optional[str]&nbsp;=&nbsp;None)&nbsp;-&amp;gt;&nbsp;None<br>
+&nbsp;<br>
+Modelo&nbsp;de&nbsp;transacción&nbsp;utilizado&nbsp;por&nbsp;la&nbsp;wallet.<br>
+Contiene&nbsp;los&nbsp;campos&nbsp;esenciales&nbsp;para&nbsp;construir,&nbsp;serializar&nbsp;y&nbsp;firmar&nbsp;una&nbsp;transacción.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;from_addr&nbsp;(str):&nbsp;Dirección&nbsp;de&nbsp;origen.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to_addr&nbsp;(str):&nbsp;Dirección&nbsp;de&nbsp;destino.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;value&nbsp;(str):&nbsp;Valor&nbsp;a&nbsp;transferir,&nbsp;manejado&nbsp;como&nbsp;string&nbsp;para&nbsp;evitar&nbsp;problemas&nbsp;de&nbsp;deserialización.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nonce&nbsp;(int):&nbsp;Nonce&nbsp;único&nbsp;de&nbsp;la&nbsp;transacción.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;gas_limit&nbsp;(int&nbsp;|&nbsp;None):&nbsp;Límite&nbsp;de&nbsp;gas&nbsp;opcional.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;data_hex&nbsp;(str&nbsp;|&nbsp;None):&nbsp;Payload&nbsp;opcional&nbsp;en&nbsp;formato&nbsp;hexadecimal.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;timestamp&nbsp;(str&nbsp;|&nbsp;None):&nbsp;Marca&nbsp;de&nbsp;tiempo;&nbsp;si&nbsp;no&nbsp;se&nbsp;proporciona,&nbsp;se&nbsp;genera&nbsp;automáticamente&nbsp;al&nbsp;serializar.<br>&nbsp;</span></td></tr>
+<tr><td>&nbsp;</td>
+<td class="singlecolumn">Methods defined here:<br>
+<dl><dt><a name="Tx-__eq__"><strong>__eq__</strong></a>(self, other)</dt><dd><span class="code">Return&nbsp;self==value.</span></dd></dl>
+
+<dl><dt><a name="Tx-__init__"><strong>__init__</strong></a>(self, from_addr: str, to_addr: str, value: str, nonce: int, gas_limit: Optional[int] = None, data_hex: Optional[str] = None, timestamp: Optional[str] = None) -&gt; None</dt><dd><span class="code">Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</span></dd></dl>
+
+<dl><dt><a name="Tx-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><span class="code">Return&nbsp;repr(self).</span></dd></dl>
+
+<dl><dt><a name="Tx-canonical_bytes"><strong>canonical_bytes</strong></a>(self) -&gt; bytes</dt><dd><span class="code">Devuelve&nbsp;la&nbsp;representación&nbsp;canónica&nbsp;en&nbsp;bytes&nbsp;de&nbsp;la&nbsp;transacción.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bytes:&nbsp;JSON&nbsp;canónico&nbsp;en&nbsp;bytes,&nbsp;listo&nbsp;para&nbsp;firma&nbsp;digital.</span></dd></dl>
+
+<dl><dt><a name="Tx-to_dict"><strong>to_dict</strong></a>(self) -&gt; Dict[str, Any]</dt><dd><span class="code">Serializa&nbsp;la&nbsp;transacción&nbsp;en&nbsp;un&nbsp;diccionario&nbsp;con&nbsp;valores&nbsp;adecuados&nbsp;para&nbsp;ser&nbsp;convertidos&nbsp;a&nbsp;JSON.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Dict[str,&nbsp;Any]:&nbsp;Representación&nbsp;de&nbsp;la&nbsp;transacción&nbsp;como&nbsp;diccionario.</span></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><span class="code">dictionary&nbsp;for&nbsp;instance&nbsp;variables</span></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><span class="code">list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object</span></dd>
+</dl>
+<hr>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__annotations__</strong> = {'data_hex': typing.Optional[str], 'from_addr': &lt;class 'str'&gt;, 'gas_limit': typing.Optional[int], 'nonce': &lt;class 'int'&gt;, 'timestamp': typing.Optional[str], 'to_addr': &lt;class 'str'&gt;, 'value': &lt;class 'str'&gt;}</dl>
+
+<dl><dt><strong>__dataclass_fields__</strong> = {'data_hex': Field(name='data_hex',type=typing.Optional[str],...appingproxy({}),kw_only=False,_field_type=_FIELD), 'from_addr': Field(name='from_addr',type=&lt;class 'str'&gt;,defaul...appingproxy({}),kw_only=False,_field_type=_FIELD), 'gas_limit': Field(name='gas_limit',type=typing.Optional[int]...appingproxy({}),kw_only=False,_field_type=_FIELD), 'nonce': Field(name='nonce',type=&lt;class 'int'&gt;,default=&lt;d...appingproxy({}),kw_only=False,_field_type=_FIELD), 'timestamp': Field(name='timestamp',type=typing.Optional[str]...appingproxy({}),kw_only=False,_field_type=_FIELD), 'to_addr': Field(name='to_addr',type=&lt;class 'str'&gt;,default=...appingproxy({}),kw_only=False,_field_type=_FIELD), 'value': Field(name='value',type=&lt;class 'str'&gt;,default=&lt;d...appingproxy({}),kw_only=False,_field_type=_FIELD)}</dl>
+
+<dl><dt><strong>__dataclass_params__</strong> = _DataclassParams(init=True,repr=True,eq=True,ord...rue,kw_only=False,slots=False,weakref_slot=False)</dl>
+
+<dl><dt><strong>__hash__</strong> = None</dl>
+
+<dl><dt><strong>__match_args__</strong> = ('from_addr', 'to_addr', 'value', 'nonce', 'gas_limit', 'data_hex', 'timestamp')</dl>
+
+<dl><dt><strong>data_hex</strong> = None</dl>
+
+<dl><dt><strong>gas_limit</strong> = None</dl>
+
+<dl><dt><strong>timestamp</strong> = None</dl>
+
+</td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
+    
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>Dict</strong> = typing.Dict<br>
+<strong>Optional</strong> = typing.Optional</td></tr></table>
+</body></html>
