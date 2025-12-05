@@ -13,6 +13,13 @@ from .address import address_from_pubkey
 NONCE_TRACKER_PATH = Path("app/nonce_tracker.json")
 
 def _load_nonce_tracker() -> Dict[str, int]:
+    """
+    Carga desde disco el rastreador de nonces por dirección.
+    Si el archivo no existe o está corrupto, devuelve un diccionario vacío, para evitar que el verificador falle por errores de formato.
+
+    Returns:
+        Dict[str, int]: Mapeo de dirección (str) a último nonce visto (int).
+    """
     if not NONCE_TRACKER_PATH.exists():
         return {}
     try:
@@ -22,20 +29,38 @@ def _load_nonce_tracker() -> Dict[str, int]:
         return {}
 
 def _save_nonce_tracker(data: Dict[str, int]) -> None:
+    """
+    Guarda en disco el rastreador de nonces por dirección.
+
+    Args:
+        data (Dict[str, int]): Mapeo de dirección (str) a último nonce visto (int).
+
+    Returns:
+        None
+
+    Raises:
+        OSError: Si ocurre un error al escribir el archivo en disco.
+    """
     with NONCE_TRACKER_PATH.open("w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
 
 def verify_tx(signed_tx: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
     """
-    Verifica criptográficamente una transacción y valida contra ataques de replay.
-    
-    Pasos:
-    1. Validar estructura y esquema de firma.
-    2. Verificar firma Ed25519 sobre el JSON canónico.
-    3. Verificar que la dirección 'from' corresponda a la llave pública.
-    4. Verificar que el nonce sea mayor al último registrado (Replay Protection).
-    
-    Retorna: (EsValida, Razón_si_falla)
+    Verifica criptográficamente una transacción firmada y valida contra ataques de replay.
+
+    Args:
+        signed_tx (Dict[str, Any]) : Paquete de transacción firmada:   
+            - "tx": Dict con los campos de la transacción (incluyendo "from" y "nonce").
+            - "signature_b64": Firma digital en Base64.
+            - "pubkey_b64": Clave pública en Base64.
+            - "sig_scheme": Esquema de firma (debe ser "Ed25519").
+
+    Returns:
+        Tuple[bool, Optional[str]]: Una tupla donde el primer elemento es True si la verificación fue exitosa, o False si falló.
+
+    Raises:
+        No lanza excepciones hacia afuera: cualquier error interno se captura
+        y se reporta como (False, "mensaje de error").
     """
     
     # 1. Validación de Estructura
@@ -87,7 +112,17 @@ def verify_tx(signed_tx: Dict[str, Any]) -> Tuple[bool, Optional[str]]:
 
 def commit_verification(signed_tx: Dict[str, Any]) -> None:
     """
-    Actualiza el rastreador de nonces una vez que la transacción se considera válida.
+    Marca una transacción verificada como aceptada actualizando el nonce tracker.
+
+    Args:
+        signed_tx (Dict[str, Any]): Paquete de transacción firmada que incluye el campo "tx" con los campos "from" y "nonce".
+
+    Returns:
+        None ( no devuelve nada ).
+
+    Raises:
+        KeyError: Si el paquete no contiene los campos esperados.
+        OSError: Si ocurre un error al guardar el nonce tracker en disco.
     """
     sender = signed_tx["tx"]["from"]
     nonce = int(signed_tx["tx"]["nonce"])

@@ -12,6 +12,17 @@ def sign(private_key: SigningKey, tx: Dict[str, Any]) -> Dict[str, Any]:
 
     tx: dict con la transacción (from, to, value, nonce, etc.)
     Devuelve paquete firmado listo para guardar en outbox/.
+
+    Args: private_key (SigningKey): Clave privada Ed25519 para firmar la transacción.
+            tx (Dict[str, Any]): Diccionario que representa la transacción a firmar.
+
+    returns: Dict[str, Any]: Diccionario que representa la transacción firmada, incluyendo la firma y la clave pública en base64.
+
+    Raises: typeError: Si tx no es un diccionario.
+            nacl.exceptions.CryptoError: Si la firma falla por alguna razón.
+
+
+
     """
     # 1) JSON canónico
     msg = canonical_json_bytes(tx)
